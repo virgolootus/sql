@@ -1,0 +1,160 @@
+Andmebaasi loomine:
+//LOOB FAILI
+sqlite3 epood_vlootus.db
+
+//ÜHENDAB ANDMEBAASID
+sqlite> ATTACH DATABASE 'epood_vlootus.db' as 'epood_vlootus';
+
+//TEEN TABELI ERINEVATE VEERGUDEGA
+sqlite> CREATE TABLE epood_vlootus.vlootus(
+(x1...> id INTEGER PRIMARY KEY AUTOINCREMENT,
+(x1...> ees_nimi VARCHAR(255) NOT NULL,
+(x1...> pere_nimi VARACHAR(255) NOT NULL,
+(x1...> email VARCHAR(255) NOT NULL,
+(x1...> car_make VARCHAR(255) NOT NULL,
+(x1...> car_model VARCHAR(255) NOT NULL,
+(x1...> car_year YEAR,
+(x1...> car_price DECIMAL(10,2));
+
+//SISESTAN VEERGUDESSE ANDMED
+sqlite> INSERT INTO vlootus(id,ees_nimi,pere_nimi,email,car_make,car_model,car_year,car_price)
+   ...> VALUES(1,'Virgo','Lootus','virgolootus@gmail.com','ford','fiesta',2004,3234.12);
+
+sqlite> INSERT INTO vlootus(ees_nimi,pere_nimi,email,car_make,car_model,car_year,car_price)
+   ...> VALUES('Kuma','Lala','kumalala@gmail.com','toyota','corolla',1999,724);
+
+sqlite> INSERT INTO vlootus(ees_nimi,pere_nimi,email,car_make,car_model,car_year,car_price)
+   ...> VALUES('Save','sta','savesta@gmail.com','toyota','prius',2000,542.99);
+sqlite> SELECT * FROM vlootus;
+
+//TABEL
+1|Virgo|Lootus|virgolootus@gmail.com|ford|fiesta|2004|3234.12
+2|Kuma|Lala|kumalala@gmail.com|toyota|corolla|1999|724
+3|Save|sta|savesta@gmail.com|toyota|prius|2000|542.99
+
+
+.mode csv
+.import /Users/it21/Downloads/MOCK_DATA.csv vlootus
+
+Harjutus 2
+
+
+//Muuda enda lisatud automargiks Zaporožets
+sqlite> UPDATE vlootus
+   ...> SET car_model = 'Zaparožets'
+   ...> WHERE id = 1;
+sqlite> SELECT * FROM vlootus WHERE id = 1;
+id  ees_nimi  pere_nimi  email                  car_make  car_model   car_year  car_price
+--  --------  ---------  ---------------------  --------  ----------  --------  ---------
+1   Virgo     Lootus     virgolootus@gmail.com  ford      Zaparožets  2004      3234.12
+
+
+//Muuda kõik Cadillac margid Citroën’iks
+sqlite> UPDATE vlootus
+   ...> SET car_make = 'Citroen'
+   ...> WHERE car_make = 'Cadillac';
+
+
+//Kustuta ära read, mille ID on 5, 10 ja 15
+sqlite> DELETE FROM vlootus
+   ...> WHERE id = 5;
+sqlite> DELETE FROM vlootus
+   ...> WHERE id = 10;
+sqlite> DELETE FROM vlootus
+   ...> WHERE id = 15;
+sqlite> SELECT * FROM vlootus LIMIT 20;
+id  ees_nimi   pere_nimi    email                            car_make       car_model       car_year  car_price
+--  ---------  -----------  -------------------------------  -------------  --------------  --------  ---------
+1   Virgo      Lootus       virgolootus@gmail.com            ford           Zaparožets      2004      3234.12
+2   Kuma       Lala         kumalala@gmail.com               toyota         corolla         1999      724
+3   Save       sta          savesta@gmail.com                toyota         prius           2000      542.99
+4   Fina       Fareweather  ffareweather3@ed.gov             Chrysler       Town & Country  1992      8930.77
+6   Dorey      Handsheart   dhandsheart5@geocities.com       Mercedes-Benz  600SL           1993      15418.43
+7   Palmer     Hedlestone   phedlestone6@barnesandnoble.com  Dodge          Stratus         2002      15354.31
+8   Cazzie     Thirtle      cthirtle7@reuters.com            Buick          Century         2005      6125.12
+9   Filip      Olczak       folczak8@weather.com             Scion          xD              2012      1033.99
+11  Nissie     Calvert      ncalverta@geocities.jp           Dodge          Caravan         2008      4654.85
+12  Michel     Barrar       mbarrarb@posterous.com           Audi           TT              2000      19969.25
+13  Chiarra    Wiper        cwiperc@samsung.com              Ford           Festiva         1988      12839.32
+14  Zitella    Lakey        zlakeyd@auda.org.au              BMW            X6 M            2013      14438.26
+16  Ransell    Poynzer      rpoynzerf@mail.ru                Plymouth       Laser           1991      11192.02
+17  Drucy      Heighton     dheightong@typepad.com           Nissan         350Z            2005      17699.85
+18  Wadsworth  Carlesi      wcarlesih@altervista.org         Lexus          RX              2000      769.38
+19  Rebecca    Kummerlowe   rkummerlowei@csmonitor.com       GMC            Suburban 1500   1993      2849.74
+20  Roch       Golsthorp    rgolsthorpj@techcrunch.com       Chevrolet      Suburban 1500   2003      15360.34
+21  Gage       Cronkshaw    gcronkshawk@ucla.edu             Chevrolet      Venture         2004      2745.54
+22  Lorrayne   Allridge     lallridgel@google.cn             Saab           9-5             2003      18488.54
+23  Clementia  Sarjant      csarjantm@webnode.com            GMC            Yukon           1995      17093.05
+
+
+//Kuva read, kus on ainult ID, perenimi, automark ja aasta, sorteeri ID järgi kasvavalt
+sqlite> SELECT id, pere_nimi, car_model, car_year FROM vlootus LIMIT 20;
+id  pere_nimi    car_model       car_year
+--  -----------  --------------  --------
+1   Lootus       Zaparožets      2004
+2   Lala         corolla         1999
+3   sta          prius           2000
+4   Fareweather  Town & Country  1992
+6   Handsheart   600SL           1993
+7   Hedlestone   Stratus         2002
+8   Thirtle      Century         2005
+9   Olczak       xD              2012
+11  Calvert      Caravan         2008
+12  Barrar       TT              2000
+13  Wiper        Festiva         1988
+14  Lakey        X6 M            2013
+16  Poynzer      Laser           1991
+17  Heighton     350Z            2005
+18  Carlesi      RX              2000
+19  Kummerlowe   Suburban 1500   1993
+20  Golsthorp    Suburban 1500   2003
+21  Cronkshaw    Venture         2004
+22  Allridge     9-5             2003
+23  Sarjant      Yukon           1995
+
+
+//Kuva 10 rida autosid, kus kliendi perenimi hakkab sama algustähega, mis sul, sorteeri autod aasta järgi kahanevalt
+sqlite> SELECT * FROM vlootus WHERE pere_nimi LIKE 'l%' ORDER BY car_year DESC LIMIT 10;
+id   ees_nimi  pere_nimi   email                          car_make       car_model  car_year  car_price
+---  --------  ----------  -----------------------------  -------------  ---------  --------  ---------
+14   Zitella   Lakey       zlakeyd@auda.org.au            BMW            X6 M       2013      14438.26
+717  Jimmy     Lanney      jlanneyjw@forbes.com           Aston Martin   Rapide     2012      6186.58
+814  Eldon     Lody        elodyml@last.fm                Lexus          CT         2012      12604.92
+306  Jessi     Labbey      jlabbey8h@stanford.edu         Mercedes-Benz  S-Class    2011      16711.06
+321  Bail      Laybourn    blaybourn8w@parallels.com      BMW            Z4         2010      6655.74
+949  Madelon   Lemmers     mlemmersqc@wikia.com           Jaguar         XJ         2008      10457.69
+954  Cathi     Lumsden     clumsdenqh@noaa.gov            Chrysler       300        2008      18314.97
+38   Willa     Langeren    wlangeren11@timesonline.co.uk  Suzuki         XL7        2007      11720.88
+86   Isidore   Lafranconi  ilafranconi2d@shareasale.com   Pontiac        Torrent    2007      5525.05
+141  Trey      Lavigne     tlavigne3w@4shared.com         Ford           F250       2007      18264.24
+//Kuva 10 rida autosid, kus kliendi perenimi hakkab sama algustähega, mis sul, sorteeri autod aasta järgi kahanevalt
+sqlite> SELECT * FROM vlootus WHERE car_make IN ('Ford', 'BMW') AND car_price > 5000 LIMIT 25;
+id   ees_nimi  pere_nimi   email                           car_make  car_model       car_year  car_price
+---  --------  ----------  ------------------------------  --------  --------------  --------  ---------
+13   Chiarra   Wiper       cwiperc@samsung.com             Ford      Festiva         1988      12839.32
+14   Zitella   Lakey       zlakeyd@auda.org.au             BMW       X6 M            2013      14438.26
+24   Godwin    Hunnable    ghunnablen@163.com              Ford      Galaxie         1966      12077.18
+30   Jens      Vallentin   jvallentint@vinaora.com         Ford      Club Wagon      1994      7814.42
+40   Felicio   Losselyong  flosselyong13@hp.com            Ford      Bronco          1993      8819.57
+47   Adolph    Mengue      amengue1a@t-online.de           BMW       3 Series        2006      9956.58
+51   Kermit    Castells    kcastells1e@youtube.com         Ford      E-Series        1991      8664.13
+54   Korrie    Toupe       ktoupe1h@scribd.com             Ford      Excursion       2002      17694.06
+55   Mace      Dunge       mdunge1i@dell.com               Ford      Econoline E250  2002      8834.4
+57   Der       Dilnot      ddilnot1k@google.com            BMW       7 Series        1993      19494.72
+100  Hermine   Sher        hsher2r@who.int                 Ford      Taurus          1998      10672.83
+106  Dukey     Spriggin    dspriggin2x@ameblo.jp           Ford      Thunderbird     1985      14841.68
+112  Janette   Sailes      jsailes33@amazon.de             BMW       6 Series        2012      11766.39
+130  Maurie    Spray       mspray3l@cocolog-nifty.com      Ford      Ranger          1989      10786.56
+134  Orland    Churms      ochurms3p@google.it             Ford      F150            1995      14880.2
+141  Trey      Lavigne     tlavigne3w@4shared.com          Ford      F250            2007      18264.24
+148  Farr      Bedlington  fbedlington43@themeforest.net   Ford      Explorer        1991      5715.38
+150  Jacinta   Baroch      jbaroch45@sciencedaily.com      Ford      E-Series        1963      13431.96
+160  Margie    Necolds     mnecolds4f@constantcontact.com  Ford      Aspire          1995      14437.63
+162  Sileas    Lambshine   slambshine4h@so-net.ne.jp       Ford      Crown Victoria  2003      13814.02
+172  Danyette  Overall     doverall4r@newsvine.com         Ford      Bronco II       1988      11481.96
+176  Octavius  Archibald   oarchibald4v@friendfeed.com     BMW       Z3              1998      18468.77
+177  Liza      Medendorp   lmedendorp4w@newyorker.com      Ford      F350            1993      13996.01
+189  Karyn     Sawdy       ksawdy58@stumbleupon.com        Ford      Mustang         1997      5990.5
+190  Haskel    Bogges      hbogges59@aboutads.info         Ford      Escort          1995      13847.61
+
+https://www.plus2net.com/python/tkinter-ttkbootstrap-table.php
